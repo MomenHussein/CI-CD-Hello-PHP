@@ -8,7 +8,6 @@ WORKDIR /var/www
 
 RUN chown -R www-data:www-data /var/www
 
-# فتح بورت 9000
 EXPOSE 9000
 
 CMD ["php-fpm"]
