@@ -7,7 +7,6 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 RUN mkdir -p storage bootstrap/cache \
-  && chmod -R 775 storage bootstrap/cache \
-  && chown -R www-data:www-data /var/www/html
+  && chmod -R 775 storage bootstrap/cache
 
-CMD ["php", "artisan", "serve", "--host=38.242.244.34", "--port=9000"]
+RUN chown -R www-data:www-data /var/www/html
