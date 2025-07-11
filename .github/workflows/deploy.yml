@@ -19,6 +19,7 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
+        port: 22
         script: |
           cd /root/my-laravel-project || git clone https://github.com/MomenHussein/CI-CD-Hello-PHP.git /root/my-laravel-project && cd /root/my-laravel-project
           git pull origin master
