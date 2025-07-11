@@ -1,5 +1,15 @@
-FROM php:8.2-apache
-RUN docker-php-ext-install mysqli
+FROM php:8.2-fpm
+
+RUN apt-get update && apt-get install -y \
+    zip unzip git curl libpng-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 WORKDIR /var/www/html
+
 COPY . .
-EXPOSE 80
+
+RUN chmod -R 775 storage bootstrap/cache
+
+CMD ["php-fpm"]
