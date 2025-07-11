@@ -10,8 +10,6 @@ WORKDIR /var/www
 
 COPY . .
 
-RUN composer install
-
 RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 9000
