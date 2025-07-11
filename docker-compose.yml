@@ -7,7 +7,6 @@ services:
     container_name: laravel_app
     volumes:
       - ./laravel:/var/www
-    working_dir: /var/www
     networks:
       - laravel-net
     depends_on:
