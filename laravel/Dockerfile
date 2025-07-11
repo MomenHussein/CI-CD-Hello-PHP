@@ -8,7 +8,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-COPY . .
+RUN composer create-project laravel/laravel .
 
 RUN chmod -R 775 storage bootstrap/cache
 
