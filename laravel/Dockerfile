@@ -4,16 +4,11 @@ RUN apt-get update && apt-get install -y \
     git curl unzip zip libzip-dev libpng-dev libjpeg-dev libonig-dev libxml2-dev \
     && docker-php-ext-install zip pdo_mysql mbstring exif pcntl bcmath gd
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 WORKDIR /var/www
 
-RUN composer create-project laravel/laravel .
+RUN chown -R www-data:www-data /var/www
 
-RUN chmod -R 775 storage bootstrap/cache
-
+# فتح بورت 9000
 EXPOSE 9000
 
 CMD ["php-fpm"]
