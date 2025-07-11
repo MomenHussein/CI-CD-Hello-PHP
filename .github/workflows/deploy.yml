@@ -26,4 +26,4 @@ jobs:
           docker-compose pull
           docker-compose up -d --build
           cd laravel
-          php artisan serve --host=38.242.244.34 --port=9000
+          nohup php artisan serve --host=38.242.244.34 --port=9000
