@@ -36,7 +36,11 @@ services:
       - laravel-db-data:/var/lib/mysql
     networks:
       - laravel-net
-
+  app:
+    volumes:
+      - .:/var/www/html
+      - ./resources:/var/www/html/resources
+      - ./public:/var/www/html/public
 volumes:
   laravel-db-data:
 
