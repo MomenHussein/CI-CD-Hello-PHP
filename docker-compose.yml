@@ -1,37 +1,47 @@
 version: '3.9'
 
 services:
-  php:
-    build: .
+  nginx:
+    image: nginx:alpine
+    container_name: laravel_nginx
+    depends_on:
+      - app
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
-      - .:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./laravel:/var/www/html
+    networks:
+      - laravel-net
+    restart: always
+
+  app:
+    image: php:8.2-fpm
+    container_name: laravel_app
+    volumes:
+      - ./laravel:/var/www/html
+    networks:
+      - laravel-net
     depends_on:
       - db
-    networks:
-      - appnet
-    environment:
-      DB_HOST: db
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
 
   db:
     image: mysql:8.1
+    container_name: laravel_db
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASS}
     volumes:
-      - dbdata:/var/lib/mysql
+      - laravel-db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: laravel_pass
     networks:
-      - appnet
+      - laravel-net
 
 volumes:
-  dbdata:
+  laravel-db-data:
 
 networks:
-  appnet:
+  laravel-net:
+    driver: bridge
