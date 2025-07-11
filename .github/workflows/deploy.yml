@@ -16,9 +16,10 @@ jobs:
     - name: Deploy to Server via SSH
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_KEY }}
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        password: ${{ secrets.SERVER_PASS }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
           cd /root/my-laravel-project || git clone https://github.com/MomenHussein/CI-CD-Hello-PHP.git /root/my-laravel-project && cd /root/my-laravel-project
