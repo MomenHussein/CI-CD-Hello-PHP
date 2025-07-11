@@ -1,15 +1,12 @@
-FROM php:8.2-fpm
+FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y \
-    zip unzip git curl libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo pdo_mysql mysqli
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY . /var/www/html
 
 WORKDIR /var/www/html
 
-COPY . .
+RUN mkdir -p storage bootstrap/cache \
+  && chmod -R 775 storage bootstrap/cache
 
-RUN chmod -R 775 storage bootstrap/cache
-
-CMD ["php-fpm"]
+RUN chown -R www-data:www-data /var/www/html
