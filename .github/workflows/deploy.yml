@@ -37,7 +37,7 @@ jobs:
 
     - name: Deploy on server
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} '
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
           echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin &&
           docker pull ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest &&
           docker stop app || true &&
