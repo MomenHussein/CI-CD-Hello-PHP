@@ -22,9 +22,8 @@ jobs:
       run: |
         echo "repo_lower=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
 
-
     - name: Login to GitHub Container Registry (GHCR)
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
 
     - name: Build Docker image
       run: |
@@ -38,13 +37,10 @@ jobs:
 
     - name: Deploy on server
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "
-          echo '${{ secrets.GHCR_TOKEN }}' | docker login ghcr.io -u '${{ secrets.GHCR_USERNAME }}' --password-stdin &&
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} '
+          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin &&
           docker pull ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest &&
           docker stop app || true &&
           docker rm app || true &&
           docker run -d --name app ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
-        "
-
-
-
+        '
