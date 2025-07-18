@@ -5,40 +5,37 @@ on:
     branches:
       - master
 
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository }}/laravel-app:latest
+  APP_ENV: production
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
-    env:
-      IMAGE_NAME: ghcr.io/momenhussein/ci-cd-hello-php:latest
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4.2.2
 
-    - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ secrets.GHCR_USERNAME }}
-        password: ${{ secrets.GHCR_TOKEN }}
+    - name: Login to GHCR
+      run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ vars.GHCR_USERNAME }}" --password-stdin
 
-    - name: Build Docker Image
+    - name: Build Docker image
       run: |
-        docker build -t $IMAGE_NAME .
+        docker build \
+          -f Dockerfile \
+          --build-arg APP_ENV=${{ env.APP_ENV }} \
+          -t ${{ env.IMAGE_NAME }} .
 
-    - name: Push Docker Image to GHCR
+    - name: Push Docker image to GHCR
+      run: docker push ${{ env.IMAGE_NAME }}
+
+    - name: Deploy on server
       run: |
-        docker push $IMAGE_NAME
-
-    - name: Deploy over SSH
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
-          docker pull $IMAGE_NAME
-          docker stop laravel_app || true
-          docker rm laravel_app || true
-          docker run -d --name laravel_app -p 80:80 $IMAGE_NAME
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "
+          docker login ghcr.io -u '${{ secrets.GHCR_USERNAME }}' --password-stdin <<< '${{ secrets.GHCR_TOKEN }}' &&
+          docker pull ghcr.io/${{ vars.GHCR_USERNAME }}/your-image-name:latest &&
+          docker stop app || true &&
+          docker rm app || true &&
+          docker run -d --name app ghcr.io/${{ vars.GHCR_USERNAME }}/your-image-name:latest
+        "
