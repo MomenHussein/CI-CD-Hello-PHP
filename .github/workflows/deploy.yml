@@ -38,12 +38,13 @@ jobs:
 
     - name: Deploy on server
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
-          docker pull ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
-          docker stop app || true
-          docker rm app || true
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "
+          echo '${{ secrets.GHCR_TOKEN }}' | docker login ghcr.io -u '${{ secrets.GHCR_USERNAME }}' --password-stdin &&
+          docker pull ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest &&
+          docker stop app || true &&
+          docker rm app || true &&
           docker run -d --name app ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
-        EOF
+        "
+
 
 
