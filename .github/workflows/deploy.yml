@@ -37,11 +37,13 @@ jobs:
 
     - name: Set up SSH Key
       run: |
+        cd CI-CD-Hello-PHP
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
 
     - name: SSH to Server and Deploy
       run: |
+        cd CI-CD-Hello-PHP
         ssh -o StrictHostKeyChecking=no user@your_server_ip 'commands here'
       
 
