@@ -37,19 +37,14 @@ jobs:
 
     - name: Set up SSH Key
       run: |
-        cd CI-CD-Hello-PHP
+        mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-
-    - name: SSH to Server and Deploy
-      run: |
-        cd CI-CD-Hello-PHP
-        ssh -o StrictHostKeyChecking=no user@your_server_ip 'commands here'
-      
+        ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
     - name: Deploy on server
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
           echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin &&
           docker pull ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest &&
           docker stop app || true &&
