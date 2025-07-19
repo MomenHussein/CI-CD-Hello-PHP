@@ -20,6 +20,11 @@ jobs:
     - name: Set up Docker
       uses: docker/setup-buildx-action@v3
 
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
     - name: Remove Git Submodules (if any)
       run: |
         git submodule deinit -f .
