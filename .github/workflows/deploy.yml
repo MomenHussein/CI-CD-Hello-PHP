@@ -75,7 +75,6 @@ jobs:
 
     - name: Deploy on server
       run: |
-        # Check branch and set environment
         case "${GITHUB_REF}" in
           refs/heads/master)
             echo "DEPLOY_ENV=local" >> $GITHUB_ENV
@@ -88,7 +87,8 @@ jobs:
           docker stop app || true &&
           docker rm app || true &&
           docker run -d --name app ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
-    
+        '
+
     - name: Apply Kubernetes Manifests via SSH
       run: |
         ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
@@ -96,4 +96,5 @@ jobs:
           kubectl apply -f configmap.yml &&
           kubectl apply -f deployment.yml &&
           kubectl apply -f service.yml &&
-          kubectl apply -f ingress.yml '
+          kubectl apply -f ingress.yml
+        '
