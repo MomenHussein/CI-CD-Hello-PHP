@@ -92,7 +92,7 @@ jobs:
     - name: Apply Kubernetes Manifests via SSH
       run: |
         ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
-          cd /path/to/your/project/k8s &&
+          cd /CI-CD-Hello-PHP/k8s &&
           kubectl apply -f configmap.yml &&
           kubectl apply -f deployment.yml &&
           kubectl apply -f service.yml &&
