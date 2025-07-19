@@ -17,6 +17,9 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4.2.2
 
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
+
     - name: Remove Git Submodules (if any)
       run: |
         git submodule deinit -f .
@@ -28,6 +31,20 @@ jobs:
       run: |
         echo "repo_lower=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
 
+    - name: Set environment variables based on branch
+      run: |
+        case "${{ github.ref }}" in
+          refs/heads/development)
+            echo "SERVICE_NAME=development" >> $GITHUB_ENV
+            ;;
+          refs/heads/master)
+            echo "SERVICE_NAME=production" >> $GITHUB_ENV
+            ;;
+          refs/heads/local)
+            echo "SERVICE_NAME=local" >> $GITHUB_ENV
+            ;;
+        esac
+    
     - name: Login to GitHub Container Registry (GHCR)
       run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
 
@@ -40,6 +57,9 @@ jobs:
 
     - name: Push Docker image to GHCR
       run: docker push ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
+
+    - name: Install SSH Client
+      run: sudo apt-get install -y openssh-client
 
     - name: Set up SSH Key
       run: |
