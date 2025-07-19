@@ -17,6 +17,12 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4.2.2
 
+    - name: Remove Git Submodules (if any)
+      run: |
+        git submodule deinit -f .
+        rm -rf .git/modules/*
+        git rm -f CI-CD-Hello-PHP || true
+
     - name: Set lowercase repository name
       id: vars
       run: |
