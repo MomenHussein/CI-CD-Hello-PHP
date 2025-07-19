@@ -35,6 +35,16 @@ jobs:
     - name: Push Docker image to GHCR
       run: docker push ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
 
+    - name: Set up SSH Key
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+    - name: SSH to Server and Deploy
+      run: |
+        ssh -o StrictHostKeyChecking=no user@your_server_ip 'commands here'
+      
+
     - name: Deploy on server
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
