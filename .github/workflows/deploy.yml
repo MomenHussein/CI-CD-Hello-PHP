@@ -25,6 +25,12 @@ jobs:
       with:
         version: 'latest'
 
+    - name: Set up Minikube
+      uses: medyagh/setup-minikube@latest
+    
+    - name: Start Minikube
+      run: minikube start
+
     - name: Remove Git Submodules (if any)
       run: |
         git submodule deinit -f .
