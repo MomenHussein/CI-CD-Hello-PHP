@@ -6,7 +6,7 @@ WORKDIR /react-app
 COPY react-app/package.json ./
 RUN npm install
 
-COPY app ./
+COPY react-app ./
 
 RUN npm run build
 
