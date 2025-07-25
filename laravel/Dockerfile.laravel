@@ -1,0 +1,8 @@
+FROM php:8.1-fpm
+
+WORKDIR /var/www/html
+COPY . ./
+RUN apt-get update && apt-get install -y unzip zip git libzip-dev && docker-php-ext-install pdo_mysql zip
+RUN composer install --no-interaction --optimize-autoloader
+EXPOSE 9000
+CMD ["php-fpm"]
