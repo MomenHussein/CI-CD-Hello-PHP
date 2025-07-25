@@ -70,15 +70,25 @@ jobs:
         npm install
         npm run build
     
-    - name: Build Docker image
+    - name: Build Laravel Docker image
       run: |
         docker build \
-          -f Dockerfile \
+          -f laravel/Dockerfile \
           --build-arg APP_ENV=${{ env.APP_ENV }} \
-          -t ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest .
+          -t ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest ./laravel
 
-    - name: Push Docker image to GHCR
+    - name: Build React Docker image
+      run: |
+        docker build \
+          -f react/Dockerfile \
+          -t ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest ./react
+
+
+    - name: Push Laravel image
       run: docker push ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
+
+    - name: Push React image
+      run: docker push ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest
 
     - name: Install SSH Client
       run: sudo apt-get install -y openssh-client
