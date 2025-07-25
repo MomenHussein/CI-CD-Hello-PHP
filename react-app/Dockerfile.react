@@ -1,19 +1,14 @@
-# Step 1: Build TypeScript code
-FROM node:18-alpine AS build
+FROM node:18-alpine
 
 WORKDIR /app
-COPY package.json .
-COPY tsconfig.json .    # لو موجود عندك
+
+COPY package*.json ./
 RUN npm install
+
 COPY . .
-RUN npm run tsc           # إذا تستخدم TypeScript
 
-# Step 2: Prepare production image
-FROM node:18
-WORKDIR /app
+RUN npm run build
 
-COPY package.json .
-RUN npm install --production
-
-EXPOSE 3000
-CMD ["npm", "start"]
+# Serve the build folder using a simple static server
+RUN npm install -g serve
+CMD ["serve", "-s", "build", "-l", "3000"]
