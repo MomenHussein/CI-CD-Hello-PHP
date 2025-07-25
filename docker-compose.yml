@@ -22,8 +22,7 @@ services:
 
   laravel:
     build:
-      context: ./laravel
-      dockerfile: Dockerfile.laravel
+    image: ghcr.io/MomenHussein/laravel-app:latest
     container_name: laravel_app
     ports:
       - "9000:9000"
@@ -61,9 +60,8 @@ services:
 
   react:
     build:
-      context: ./react
-      dockerfile: Dockerfile.react
-    container_name: react_app
+      context: ./react-app
+      image: ghcr.io/USERNAME/react-app:latest
     ports:
       - "3000:3000"
     volumes:
