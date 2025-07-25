@@ -1,0 +1,14 @@
+# Use the official Terraform image as a base
+FROM hashicorp/terraform:light
+
+# Set the working directory inside the container
+WORKDIR /infra
+
+# Copy your Terraform configuration files into the container
+COPY . /infra
+
+# Optionally, initialize Terraform (can also be done in pipeline)
+# RUN terraform init
+
+# Default command when container runs (can be overridden in pipeline)
+CMD ["terraform", "--version"]
