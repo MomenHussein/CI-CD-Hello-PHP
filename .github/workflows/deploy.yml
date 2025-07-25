@@ -79,10 +79,8 @@ jobs:
 
     - name: Build React Docker image
       run: |
-        docker build \
-          -f react-app/Dockerfile.react \
-          -t ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest ./react-app
-
+        docker build -f react-app/Dockerfile.react \
+        -t ghcr.io/${{ github.repository_owner }}/react-app:latest ./react-app
 
     - name: Push Laravel image
       run: docker push ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
@@ -114,7 +112,8 @@ jobs:
           docker stop app || true &&
           docker rm app || true &&
           docker run -d --name app ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
-        '
+          docker rm -f react-app || true
+          docker run -d --name react-app -p 80:80 ghcr.io/${{ github.repository_owner }}/react-app:latest        '
 
     - name: Apply Kubernetes Manifests via SSH
       run: |
