@@ -112,11 +112,9 @@ jobs:
           docker stop app || true &&
           docker rm app || true &&
           docker run -d --name app ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
-          cd react-app
           npm install
-          npm run build || cat /home/node/.npm/_logs/*-debug.log
           docker rm -f react-app || true
-          docker run -d --name react-app -p 80:80 ghcr.io/${{ github.repository_owner }}/react-app:latest        '
+          docker run -d --name react-app -p 3000:80 ghcr.io/${{ github.repository_owner }}/react-app:latest        '
 
     - name: Apply Kubernetes Manifests via SSH
       run: |
