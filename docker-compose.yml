@@ -65,7 +65,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./react:/app
+      - ./var/www/html/react
     networks:
       - app-network
     stdin_open: true
