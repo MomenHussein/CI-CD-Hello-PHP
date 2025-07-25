@@ -81,7 +81,7 @@ jobs:
       run: |
         docker build \
           -f react-app/Dockerfile.react \
-          -t ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest ./react
+          -t ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest ./react-app
 
 
     - name: Push Laravel image
