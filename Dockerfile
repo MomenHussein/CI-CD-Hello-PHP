@@ -1,26 +1,29 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
-# Install system dependencies
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+
 RUN apt-get update && apt-get install -y \
-    git unzip curl libzip-dev zip \
-    && docker-php-ext-install pdo pdo_mysql zip
+    curl \
+    gnupg \
+    libzip-dev \
+    zip \
+    unzip \
+    libonig-dev \
+    libxml2-dev \
+    libicu-dev \
+    && docker-php-ext-install bcmath intl
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Set working directory
-WORKDIR /var/www/html
+# Install Node.js + npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 
 # Copy project files
-COPY . .
+COPY . /var/www/html
 
-# Install dependencies
-RUN composer install --no-interaction --no-progress --prefer-dist
+WORKDIR /var/www/html
 
-# Fix permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+RUN mkdir -p storage bootstrap/cache \
+  && chmod -R 775 storage bootstrap/cache
 
-EXPOSE 9000
-
-CMD ["php-fpm"]
+RUN chown -R www-data:www-data /var/www/html
