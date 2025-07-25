@@ -76,11 +76,13 @@ services:
       timeout: 10s
       retries: 5
 
-  proxy:
+  nginx:
     image: nginx:alpine
-    container_name: nginx_proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
     volumes:
-      - ./nginx/proxy.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
     depends_on:
