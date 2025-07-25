@@ -73,14 +73,14 @@ jobs:
     - name: Build Laravel Docker image
       run: |
         docker build \
-          -f laravel/Dockerfile \
+          -f laravel/Dockerfile.laravel \
           --build-arg APP_ENV=${{ env.APP_ENV }} \
           -t ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest ./laravel
 
     - name: Build React Docker image
       run: |
         docker build \
-          -f react/Dockerfile \
+          -f react-app/Dockerfile.react \
           -t ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest ./react
 
 
