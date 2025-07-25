@@ -63,7 +63,7 @@ services:
       context: ./react-app
       image: ghcr.io/USERNAME/react-app:latest
     ports:
-      - "3000:3000"
+      - "3000:80"
     volumes:
       - ./var/www/html/react
     networks:
