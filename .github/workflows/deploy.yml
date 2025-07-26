@@ -156,8 +156,14 @@ jobs:
         DOCKER_CONFIG_JSON=$(cat ~/.docker/config.json | base64 -w 0)
         echo "DOCKER_CONFIG_JSON=$DOCKER_CONFIG_JSON" >> $GITHUB_ENV
 
+    - name: Apply namespace
+      run: |
+        cd k8s &&
+        kubectl apply -f namespace.yaml
+
     - name: Generate secret-ghcr.yaml
       run: |
+        cd ..
         cat <<EOF > secret-ghcr.yaml
         apiVersion: v1
         kind: Secret
@@ -175,8 +181,6 @@ jobs:
     - name: Apply Kubernetes Manifests via SSH
       run: |
           cd k8s &&
-          # 1. إنشاء الـ Namespace (لازم يكون أول حاجة)
-          kubectl apply -f namespace.yml
           # 2. إنشاء Secret لمصادقة GHCR (GitHub Container Registry)
           kubectl apply -f secret-ghcr.yaml          
           # 3. إنشاء ConfigMap لتمرير الإعدادات الخاصة بـ Laravel أو React
