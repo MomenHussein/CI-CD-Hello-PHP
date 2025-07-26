@@ -124,7 +124,7 @@ jobs:
           docker pull ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest &&
           docker stop app || true &&
           docker rm app || true &&
-          docker run -d --name app ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
+          docker run -d --name app -p 9000:80 ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
           docker stop react-app || true &&
           docker rm -f react-app || true
           docker run -d --name react-app -p 3000:80 ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest        '
