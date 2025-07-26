@@ -142,8 +142,25 @@ jobs:
     - name: Apply Kubernetes Manifests via SSH
       run: |
           cd k8s &&
-          kubectl apply -f configmap.yml &&
-          kubectl apply -f deployment.yml &&
-          kubectl apply -f service.yml &&
-          kubectl apply -f ingress.yml
+          # 1. إنشاء الـ Namespace (لازم يكون أول حاجة)
+          kubectl apply -f namespace.yml
+          # 2. إنشاء Secret لمصادقة GHCR (GitHub Container Registry)
+          kubectl apply -f secret-ghcr.yaml          
+          # 3. إنشاء ConfigMap لتمرير الإعدادات الخاصة بـ Laravel أو React
+          kubectl apply -f configmap.yml          
+          # 4. إنشاء Deployment خاص بـ Laravel
+          kubectl apply -f laravel-deployment.yaml          
+          # 5. إنشاء Service للـ Laravel
+          kubectl apply -f laravel-service.yaml          
+          # 6. إنشاء Deployment خاص بـ React
+          kubectl apply -f react-deployment.yaml          
+          # 7. إنشاء Service للـ React
+          kubectl apply -f react-service.yaml         
+          # 8. إنشاء الـ Ingress (علشان يربط الـ Domain بالـ Services)
+          kubectl apply -f ingress.yml     
+          # 9. أي Services تانية إضافية (لو فيه)
+          kubectl apply -f service.yaml
+
+          
+
         
