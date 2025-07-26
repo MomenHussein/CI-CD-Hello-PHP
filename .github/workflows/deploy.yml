@@ -182,21 +182,21 @@ jobs:
       run: |
           cd k8s &&
           # 2. إنشاء Secret لمصادقة GHCR (GitHub Container Registry)
-          kubectl apply -f secret-ghcr.yaml          
+          kubectl apply -f secret-ghcr.yml          
           # 3. إنشاء ConfigMap لتمرير الإعدادات الخاصة بـ Laravel أو React
           kubectl apply -f configmap.yml          
           # 4. إنشاء Deployment خاص بـ Laravel
-          kubectl apply -f laravel-deployment.yaml          
+          kubectl apply -f laravel-deployment.yml          
           # 5. إنشاء Service للـ Laravel
-          kubectl apply -f laravel-service.yaml          
+          kubectl apply -f laravel-service.yml          
           # 6. إنشاء Deployment خاص بـ React
-          kubectl apply -f react-deployment.yaml          
+          kubectl apply -f react-deployment.yml          
           # 7. إنشاء Service للـ React
-          kubectl apply -f react-service.yaml         
+          kubectl apply -f react-service.yml         
           # 8. إنشاء الـ Ingress (علشان يربط الـ Domain بالـ Services)
           kubectl apply -f ingress.yml     
           # 9. أي Services تانية إضافية (لو فيه)
-          kubectl apply -f service.yaml
+          kubectl apply -f service.yml
 
           
 
