@@ -79,10 +79,12 @@ jobs:
 
     - name: Build React app
       run: |
-        cd react-app
-        rm -f package-lock.json
-        npm install
-        npm run build
+          cd react-app
+          rm -f package-lock.json
+          npm install
+          npm install web-vitals --save || true
+          npm run build
+          cd ..
 
     - name: Copy React build to Laravel public/react
       run: |
