@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react
+  template:
+    metadata:
+      labels:
+        app: react
+    spec:
+      containers:
+        - name: react
+          image: ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest
+          ports:
+            - containerPort: 3000
+    - name: Set lowercase repository name
+      id: vars
+      run: |
+        echo "repo_lower=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
