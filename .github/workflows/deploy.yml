@@ -64,17 +64,24 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Install dependencies
-      working-directory: ./react-app
-      run: |
-        npm install
-        npm run build
-
     - name: Install NPM dependencies & build assets
       working-directory: ./laravel
       run: |
         npm install
         npm run build
+        
+    - name: Install dependencies
+      working-directory: ./react-app
+      run: |
+        npm install
+        npm run build
+        cd ..
+
+    - name: Copy React build to Laravel public/react
+      run: |
+        rm -rf laravel/public/react
+        mkdir -p laravel/public/react
+        cp -r react-app/build/* laravel/public/react/
     
     - name: Build Laravel Docker image
       run: |
