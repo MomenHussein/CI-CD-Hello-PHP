@@ -16,7 +16,7 @@ spec:
         - name: laravel
           image: ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
           ports:
-            - containerPort: 8000
+            - containerPort: 9000
     - name: Set lowercase repository name
       id: vars
       run: |
