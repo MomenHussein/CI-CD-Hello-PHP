@@ -1,7 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: laravel-ingress
+  name: laravel-react-ingress
+  namespace: laravel-react-app
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -9,10 +10,17 @@ spec:
     - host: laravel.local
       http:
         paths:
-          - path: /
+          - path: /api
             pathType: Prefix
             backend:
               service:
                 name: laravel-service
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: react-service
                 port:
                   number: 80
