@@ -1,25 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: laravel-app
+  name: php-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: laravel
+      app: php-app
   template:
     metadata:
       labels:
-        app: laravel
+        app: php-app
     spec:
       containers:
-        - name: laravel
-          image: ghcr.io/${{ steps.vars.outputs.repo_lower }}/laravel-app:latest
+        - name: php-container
+          image: ghcr.io/momenhussein/ci-cd-hello-php:latest
           ports:
-            - containerPort: 9000
-    imagePullSecrets:
-    - name: ghcr-secret
-    - name: Set lowercase repository name
-      id: vars
-      run: |
-        echo "repo_lower=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+            - containerPort: 80
+      imagePullSecrets:
+        - name: ghcr-secret
