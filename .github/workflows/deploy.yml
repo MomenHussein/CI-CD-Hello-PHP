@@ -163,7 +163,7 @@ jobs:
 
     - name: Generate secret-ghcr.yml
       run: |
-        cd ..
+        cd k8s &&
         cat <<EOF > secret-ghcr.yml
         apiVersion: v1
         kind: Secret
@@ -176,7 +176,9 @@ jobs:
         EOF
 
     - name: Apply GHCR secret to Kubernetes
-      run: kubectl apply -f secret-ghcr.yml
+      run: |
+        cd k8s &&
+        kubectl apply -f secret-ghcr.yml
       
     - name: Apply Kubernetes Manifests via SSH
       run: |
