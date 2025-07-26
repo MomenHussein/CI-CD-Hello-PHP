@@ -17,6 +17,8 @@ spec:
           image: ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest
           ports:
             - containerPort: 3000
+      imagePullSecrets:
+      - name: ghcr-secret
     - name: Set lowercase repository name
       id: vars
       run: |
