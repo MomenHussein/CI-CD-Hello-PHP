@@ -139,6 +139,39 @@ jobs:
           docker rm -f react-app || true
           docker run -d --name react-app -p 3000:80 ghcr.io/${{ steps.vars.outputs.repo_lower }}/react-app:latest        '
 
+    - name: Create Docker config.json for GHCR
+      run: |
+        mkdir -p ~/.docker
+        echo '{ 
+          "auths": {
+            "ghcr.io": {
+              "username": "${{ secrets.GHCR_USERNAME }}",
+              "password": "${{ secrets.GHCR_TOKEN }}"
+            }
+          }
+        }' > ~/.docker/config.json
+    - name: Encode Docker config.json
+      id: dockerconfig
+      run: |
+        DOCKER_CONFIG_JSON=$(cat ~/.docker/config.json | base64 -w 0)
+        echo "DOCKER_CONFIG_JSON=$DOCKER_CONFIG_JSON" >> $GITHUB_ENV
+
+    - name: Generate secret-ghcr.yaml
+      run: |
+        cat <<EOF > secret-ghcr.yaml
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: ghcr-secret
+          namespace: my-app
+        type: kubernetes.io/dockerconfigjson
+        data:
+          .dockerconfigjson: ${{ env.DOCKER_CONFIG_JSON }}
+        EOF
+
+    - name: Apply GHCR secret to Kubernetes
+      run: kubectl apply -f secret-ghcr.yaml
+      
     - name: Apply Kubernetes Manifests via SSH
       run: |
           cd k8s &&
