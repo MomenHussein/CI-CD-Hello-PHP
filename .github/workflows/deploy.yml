@@ -76,6 +76,12 @@ jobs:
         npm install
         npm run build
         cd ..
+    - name: Build React app
+      run: |
+        cd react-app
+        npm ci
+        npm install web-vitals --save-dev || true
+        npm run build
 
     - name: Copy React build to Laravel public/react
       run: |
