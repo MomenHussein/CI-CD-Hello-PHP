@@ -1,4 +1,4 @@
-name: Deploy Laravel App via SSH
+name: Deploy Laravel & React App via SSH
 
 on:
   push:
@@ -78,8 +78,8 @@ jobs:
         cd ..
 
     - name: Build React app
+      working-directory: ./react-app
       run: |
-          cd react-app
           rm -f package-lock.json
           npm install
           npm install web-vitals --save || true
