@@ -9,7 +9,7 @@ resource "kubernetes_ingress_v1" "app_ingress" {
 
   spec {
     rule {
-      host = "your-domain.com"
+      host = "laravel.local"
 
       http {
         path {
