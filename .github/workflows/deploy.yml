@@ -32,6 +32,19 @@ jobs:
     - name: PHP Lint
       run: find . -type f -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 php -l
 
+    - name: Copy .env.example to .env
+      working-directory: ./laravel
+      run: cp .env.example .env
+    
+    - name: Generate Laravel app key
+      working-directory: ./laravel
+      run: php artisan key:generate
+    
+    - name: Run PHPUnit tests
+      working-directory: ./laravel
+      run: php artisan test
+
+
       #  Run PHPUnit
     - name: Run PHPUnit
       working-directory: ./laravel
