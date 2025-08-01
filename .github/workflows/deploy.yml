@@ -17,6 +17,31 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4.2.2
 
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+          php-version: '8.2'
+          extensions: mbstring, xml, bcmath, curl, gd, pdo, pdo_mysql
+          tools: composer
+
+    - name: Install Dependencies
+      run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      # PHP Lint Step , CI to check php code before production
+    - name: PHP Lint
+      run: find . -type f -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 php -l
+
+      #  Run PHPUnit
+    - name: Run PHPUnit
+      run: vendor/bin/phpunit --configuration phpunit.xml
+
+      # build/deploy
+
+    - name: Build Assets
+      run: |
+        npm ci
+        npm run build
+
     - name: Set up Docker
       uses: docker/setup-buildx-action@v3
 
