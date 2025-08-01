@@ -35,6 +35,15 @@ jobs:
     - name: Copy .env.example to .env
       working-directory: ./laravel
       run: cp .env.example .env
+
+    - name: Copy .env file
+      run: cp .env.example .env
+      working-directory: ./laravel
+
+    - name: Generate app key
+      run: php artisan key:generate
+      working-directory: ./laravel
+
     
     - name: Generate Laravel app key
       working-directory: ./laravel
