@@ -25,6 +25,7 @@ jobs:
           tools: composer
 
     - name: Install Dependencies
+      working-directory: ./laravel
       run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       # PHP Lint Step , CI to check php code before production
@@ -33,7 +34,8 @@ jobs:
 
       #  Run PHPUnit
     - name: Run PHPUnit
-      run: vendor/bin/phpunit --configuration phpunit.xml
+      working-directory: ./laravel
+      run: ./vendor/bin/phpunit --configuration phpunit.xml
 
       # build/deploy
 
